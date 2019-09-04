@@ -9,7 +9,7 @@ Amplify.configure(awsconfig);
 const listTodos = `query listTodos {
   listTodos{
     items{
-      
+      id
       name
       description
     }
@@ -33,7 +33,8 @@ class App extends Component {
     super(props);
     this.state={
       name:"",
-      description:""
+      description:"",
+      lista: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.todoMutation = this.todoMutation.bind(this);
@@ -55,10 +56,10 @@ class App extends Component {
   listQuery = async () => {
     console.log('listing todos');
     const allTodos = await API.graphql(graphqlOperation(listTodos));
-    alert(JSON.stringify(allTodos));
+    this.setState({ lista: allTodos.data.listTodos.items});
+    alert(JSON.stringify(this.state.lista[0]));
     
   }
-  
   render(){
   return (
     <div className="App">
@@ -68,6 +69,16 @@ class App extends Component {
        </form>
        <button onClick={this.todoMutation}>GraphQL Mutation</button>
        <button onClick={this.listQuery}>GraphQL Query</button> 
+       <table aling='center' >
+          <tr>
+            <th>Cuenta</th>
+            <th>Usuario</th>
+          </tr>
+          {this.state.lista.map((item) => 
+            <tr> <td>{item.name}</td> <td>{item.description}</td> </tr> 
+          )}
+       </table>
+       
     </div>
   );
 }
