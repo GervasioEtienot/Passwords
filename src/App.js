@@ -10,20 +10,23 @@ const listTodos = `query listTodos {
   listTodos{
     items{
       id
-      name
-      description
+      cuenta
+      usuario
+      clave
     }
   }
 }`
 
-const addTodo = `mutation createTodo($name:String! $description: String!) {
+const addTodo = `mutation createTodo($cuenta:String! $usuario:String! $clave:String!) {
   createTodo(input:{
-    name:$name
-    description:$description
+    cuenta:$cuenta
+    usuario:$usuario
+    clave:$clave
   }){
     id
-    name
-    description
+    cuenta
+    usuario
+    clave
   }
 }`
 
@@ -32,8 +35,9 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state={
-      name:"",
-      description:"",
+      cuenta:"",
+      usuario:"",
+      clave:"",
       lista: []
     }
     this.handleChange = this.handleChange.bind(this);
@@ -45,8 +49,9 @@ class App extends Component {
   
   todoMutation = async () => {
     const todoDetails = {
-      name: this.state.name,
-      description: this.state.description
+      cuenta: this.state.cuenta,
+      usuario: this.state.usuario,
+      clave: this.state.clave
     };
     
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
@@ -57,25 +62,26 @@ class App extends Component {
     console.log('listing todos');
     const allTodos = await API.graphql(graphqlOperation(listTodos));
     this.setState({ lista: allTodos.data.listTodos.items});
-    alert(JSON.stringify(this.state.lista[0]));
-    
+        
   }
   render(){
   return (
     <div className="App">
        <form>
-         <input type="text" name="name" placeholder="Nombre" value={this.state.name} onChange={this.handleChange} />
-         <input type="text" name="description" placeholder="Descripción" value={this.state.description} onChange={this.handleChange} />
+         <input type="text" name="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+         <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
+         <input type="text" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
        </form>
-       <button onClick={this.todoMutation}>GraphQL Mutation</button>
-       <button onClick={this.listQuery}>GraphQL Query</button> 
-       <table aling='center' >
+       <button onClick={this.todoMutation}>Agregar</button>
+       <button onClick={this.listQuery}>Listar/Actualizar</button> 
+       <table align="center" cellpadding="10" border='1' >
           <tr>
             <th>Cuenta</th>
             <th>Usuario</th>
+            <th>clave</th>
           </tr>
           {this.state.lista.map((item) => 
-            <tr> <td>{item.name}</td> <td>{item.description}</td> </tr> 
+            <tr> <td>{item.cuenta}</td> <td>{item.usuario}</td> <td>{item.clave}</td> </tr> 
           )}
        </table>
        
