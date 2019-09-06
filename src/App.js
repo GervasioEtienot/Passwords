@@ -17,8 +17,9 @@ const listTodos = `query listTodos {
   }
 }`
 
-const addTodo = `mutation createTodo($cuenta:String! $usuario:String! $clave:String!) {
+const addTodo = `mutation createTodo($id:ID! $cuenta:String! $usuario:String! $clave:String!) {
   createTodo(input:{
+    id:$id
     cuenta:$cuenta
     usuario:$usuario
     clave:$clave
@@ -48,14 +49,17 @@ class App extends Component {
   }
   
   todoMutation = async () => {
+    let {lista} = this.state;
+    let numeroId = (lista.length+1).toString();
     const todoDetails = {
+      id: numeroId,
       cuenta: this.state.cuenta,
       usuario: this.state.usuario,
       clave: this.state.clave
     };
-    
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
     alert(JSON.stringify(newTodo));
+    this.listQuery()
   }
 
   listQuery = async () => {
@@ -67,18 +71,18 @@ class App extends Component {
   render(){
   return (
     <div className="App">
-       <form>
+       <form onSubmit={this.todoMutation} >
          <input type="text" name="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
          <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
          <input type="text" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
+         <button type="submit" onClick={this.todoMutation}>Agregar</button>
        </form>
-       <button onClick={this.todoMutation}>Agregar</button>
-       <button onClick={this.listQuery}>Listar/Actualizar</button> 
+       <br/>
        <table align="center" cellpadding="10" border='1' >
           <tr>
             <th>Cuenta</th>
             <th>Usuario</th>
-            <th>clave</th>
+            <th>Clave</th>
           </tr>
           {this.state.lista.map((item) => 
             <tr> <td>{item.cuenta}</td> <td>{item.usuario}</td> <td>{item.clave}</td> </tr> 
@@ -87,6 +91,9 @@ class App extends Component {
        
     </div>
   );
+}
+componentDidMount(){
+  this.listQuery()
 }
 }
 
