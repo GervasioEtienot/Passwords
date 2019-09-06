@@ -19,6 +19,12 @@
   color: white;
 }
 
+.Boton {
+  border-radius:35px;
+  background-color: rgb(87, 99, 102);
+  color: white;
+}
+
 .App-link {
   color: #61dafb;
 }

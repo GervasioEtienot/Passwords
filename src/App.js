@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Item from './Item';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { withAuthenticator } from 'aws-amplify-react';
@@ -71,21 +72,21 @@ class App extends Component {
   render(){
   return (
     <div className="App">
-       <form onSubmit={this.todoMutation} >
+       <form onSubmit={this.todoMutation}  >
          <input type="text" name="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
          <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
-         <input type="text" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
+         <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
          <button type="submit" onClick={this.todoMutation}>Agregar</button>
        </form>
        <br/>
-       <table align="center" cellpadding="10" border='1' >
+       <table align="center" cellpadding="10" >
           <tr>
             <th>Cuenta</th>
             <th>Usuario</th>
             <th>Clave</th>
           </tr>
-          {this.state.lista.map((item) => 
-            <tr> <td>{item.cuenta}</td> <td>{item.usuario}</td> <td>{item.clave}</td> </tr> 
+          {this.state.lista.map((item,index) => 
+                   <Item datos={item} key={index} /> 
           )}
        </table>
        
