@@ -4,6 +4,7 @@ import Item from './Item';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { withAuthenticator } from 'aws-amplify-react';
+import { async } from 'q';
 
 Amplify.configure(awsconfig);
 
@@ -18,12 +19,23 @@ const listTodos = `query listTodos {
   }
 }`
 
-const addTodo = `mutation createTodo($id:ID! $cuenta:String! $usuario:String! $clave:String!) {
+const addTodo = `mutation createTodo($cuenta:String! $usuario:String! $clave:String!) {
   createTodo(input:{
-    id:$id
+    
     cuenta:$cuenta
     usuario:$usuario
     clave:$clave
+  }){
+    id
+    cuenta
+    usuario
+    clave
+  }
+}`
+
+const eliminarCuenta = `mutation deleteTodo($id:ID!){
+  deleteTodo(input:{
+    id:$id
   }){
     id
     cuenta
@@ -50,16 +62,13 @@ class App extends Component {
   }
   
   todoMutation = async () => {
-    let {lista} = this.state;
-    let numeroId = (lista.length+1).toString();
     const todoDetails = {
-      id: numeroId,
       cuenta: this.state.cuenta,
       usuario: this.state.usuario,
       clave: this.state.clave
     };
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
-    alert(JSON.stringify(newTodo));
+    alert("La cuenta de " + JSON.stringify(newTodo.data.createTodo.cuenta) + " ha sido registrada.");
     this.listQuery()
   }
 
@@ -69,25 +78,44 @@ class App extends Component {
     this.setState({ lista: allTodos.data.listTodos.items});
         
   }
+
+  quitarCuenta = async (idCuenta) => {
+    if(window.confirm("Está seguro que desea eliminar la cuenta")){
+      const borrarId = { id: idCuenta };
+      const borrarCuenta = await API.graphql(graphqlOperation(eliminarCuenta, borrarId));
+      console.log(JSON.stringify(borrarCuenta));
+      this.listQuery()
+    }
+    
+  }
   render(){
   return (
     <div className="App">
-       <form onSubmit={this.todoMutation}  >
-         <input type="text" name="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+       <form>
+        <fieldset>
+          <legend>Nueva Cuenta</legend>
+          <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+        
          <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
          <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
-         <button type="submit" onClick={this.todoMutation}>Agregar</button>
+         <button type="button" onClick={this.todoMutation}>Agregar</button>
+        </fieldset>
        </form>
        <br/>
-       <table align="center" cellpadding="10" >
-          <tr>
-            <th>Cuenta</th>
-            <th>Usuario</th>
-            <th>Clave</th>
-          </tr>
-          {this.state.lista.map((item,index) => 
-                   <Item datos={item} key={index} /> 
-          )}
+       <table align="center" cellPadding="10" >
+           <thead>
+              <tr>
+                <th>Cuenta</th>
+                <th>Usuario</th>
+                <th>Clave</th>
+                <td><i>Mostrar</i></td>
+              </tr>
+           </thead>    
+           <tbody>
+              {this.state.lista.map((item,index) => 
+                      <Item datos={item} key={index} onRemove={ () => this.quitarCuenta(item.id)} /> 
+              )}
+           </tbody>
        </table>
        
     </div>

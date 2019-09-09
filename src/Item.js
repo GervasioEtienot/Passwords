@@ -9,7 +9,7 @@ class Item extends Component{
     }
    }
 
-    _remove(){
+    quitarCuenta(){
         if(this.props.onRemove)
             this.props.onRemove();
     }
@@ -24,9 +24,9 @@ class Item extends Component{
             <tr>
                <td align="left"> {this.props.datos.cuenta} </td>
                <td align="left"> {this.props.datos.usuario} </td>
-               <td align="left"> {this.state.claveVisible ? this.props.datos.clave : '******'} </td>
-               <span> <input type="checkbox"  onClick={this.mostrar.bind(this)}/><i>Mostrar</i></span>
-               <span> <button className="Boton" onClick={this._remove.bind(this)}><i >   Eliminar</i></button> </span>                              
+               <td width="30%" > {this.state.claveVisible ? this.props.datos.clave : '******'} </td>
+               <td> <input type="checkbox"  onClick={this.mostrar.bind(this)}/></td>
+               <td> <button className="Boton" onClick={this.quitarCuenta.bind(this)}><i >   Eliminar</i></button> </td>                              
             </tr>
         )
     }
