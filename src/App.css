@@ -1,5 +1,12 @@
 .App {
   text-align: center;
+  
+}
+.Formulario {
+  display: block;
+  align-content: left;
+  align-items: left;
+  justify-content: left; 
 }
 
 .App-logo {
