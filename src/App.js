@@ -81,6 +81,7 @@ class App extends Component {
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
     alert("La cuenta de " + JSON.stringify(newTodo.data.createTodo.cuenta) + " ha sido registrada.");
     this.listQuery()
+    this.setState({cuenta:"", usuario:"", clave:""});
   }
 
   getUser = async () => {
@@ -112,17 +113,23 @@ class App extends Component {
   render(){
   return (
 <container className="App">
-    
-       <form>
-        <fieldset>
-          <legend>Nueva Cuenta</legend>
-          <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
-          <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
-          <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
-          <button type="button" onClick={this.todoMutation}>Agregar</button>
-        </fieldset>
-       </form>
-
+    <Grid>
+      <Row>
+        <Col xs={3} sm={3} md={2} lg={2} />
+        <Col xs={6} sm={6} md={8} lg={8} >
+          <form>
+            <fieldset>
+              <legend>Nueva Cuenta</legend>
+              <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+              <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
+              <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
+              <button type="button" onClick={this.todoMutation}>Agregar</button>
+            </fieldset>
+          </form>
+        </Col>
+        <Col xs={3} sm={3} md={2} lg={2} />
+      </Row>
+    </Grid>
         <br/>
        <table align="center" cellPadding="10" >
            <thead>
