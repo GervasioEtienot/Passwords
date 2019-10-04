@@ -63,6 +63,7 @@ class App extends Component {
       clave:"",
       lista: [],
       loggedUser: '',
+      botonNuevaCuenta: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.todoMutation = this.todoMutation.bind(this);
@@ -81,7 +82,7 @@ class App extends Component {
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
     alert("La cuenta de " + JSON.stringify(newTodo.data.createTodo.cuenta) + " ha sido registrada.");
     this.listQuery()
-    this.setState({cuenta:"", usuario:"", clave:""});
+    this.setState({cuenta:"", usuario:"", clave:"", botonNuevaCuenta: false});
   }
 
   getUser = async () => {
@@ -108,55 +109,76 @@ class App extends Component {
       //console.log(JSON.stringify(borrarCuenta));
       this.listQuery()
     }
-    
+  }  
+  botNewCuetna = () => {
+    this.setState({botonNuevaCuenta: true});
   }
+  cancelar = () => {this.setState( {botonNuevaCuenta: true} ); }
+  
   render(){
-  return (
-<div >
-    <Grid>
-      <Row>
-        <Col xs={3} sm={3} md={2} lg={2} />
-        <Col xs={6} sm={6} md={8} lg={8} className="Grid">
-          <form className="ui form">
-              <div className="field">
-                 <label>Cuenta</label>
-                 <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
-              </div>
-              <div className="field">
-                <label>Usuario</label>
-                <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
-              </div>
-              <div className="field">
-                <label>Clave</label>
-                <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
-              </div>
-                <br/>
-              <button className="ui button" type="button" onClick={this.todoMutation}>Agregar</button>
-            
-          </form>
-        </Col>
-        <Col xs={3} sm={3} md={2} lg={2} />
-      </Row>
-    </Grid>
+  if(this.state.botonNuevaCuenta){
+    return (
+      <div >
+          <Grid>
+            <Row>
+              <Col xs={3} sm={3} md={2} lg={2} />
+              <Col xs={6} sm={6} md={8} lg={8} className="Grid">
+                <div className="ui inverted segment">
+                   <form className="ui inverted form">
+                      <div className="field">
+                        <label>Cuenta</label>
+                        <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+                      </div>
+                      <div className="field">
+                        <label>Usuario</label>
+                        <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
+                      </div>
+                      <div className="field">
+                        <label>Clave</label>
+                        <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
+                      </div>
+                        <br/>
+                      <div class="ui buttons">
+                        <button className="ui button" onClick={this.cancelar}>Cancelar</button>
+                        <div class="o"></div>
+                        <button className="ui positive button" onClick={this.todoMutation} >Guardar</button>
+                      </div>
+                  </form>
+                </div>
+              </Col>
+              <Col xs={3} sm={3} md={2} lg={2} />
+            </Row>
+          </Grid>
+      </div>
+    );
+  }  
+  else{
+    return(
+     <div>
+        <button className="ui primary basic button" onClick={this.botNewCuetna}>Nueva Cuenta</button>
         <br/>
-       <table className="ui compact celled definition table" >
-           <thead className="full-width" >
+        <table className="ui compact celled definition unstackable table" >
+            <thead className="full-width" >
               <tr>
                 <th>Cuenta</th>
                 <th>Usuario</th>
                 <th>Clave</th>
                 
               </tr>
-           </thead>    
-           <tbody>
+            </thead>    
+            <tbody>
               {this.state.lista.map((item,index) => 
                       <Item datos={item} key={index} onRemove={ () => this.quitarCuenta(item.id)} /> 
               )}
-           </tbody>
-       </table>
+            </tbody>
+        </table>
+     </div>
+ );
+    
+  }
+  
 
-  </div>
-  );
+       
 }
 componentDidMount(){
   this.getUser();
