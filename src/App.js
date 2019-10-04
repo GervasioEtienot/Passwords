@@ -112,32 +112,40 @@ class App extends Component {
   }
   render(){
   return (
-<container className="App">
+<div >
     <Grid>
       <Row>
         <Col xs={3} sm={3} md={2} lg={2} />
-        <Col xs={6} sm={6} md={8} lg={8} >
-          <form>
-            <fieldset>
-              <legend>Nueva Cuenta</legend>
-              <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
-              <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
-              <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
-              <button type="button" onClick={this.todoMutation}>Agregar</button>
-            </fieldset>
+        <Col xs={6} sm={6} md={8} lg={8} className="Grid">
+          <form className="ui form">
+              <div className="field">
+                 <label>Cuenta</label>
+                 <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
+              </div>
+              <div className="field">
+                <label>Usuario</label>
+                <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
+              </div>
+              <div className="field">
+                <label>Clave</label>
+                <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
+              </div>
+                <br/>
+              <button className="ui button" type="button" onClick={this.todoMutation}>Agregar</button>
+            
           </form>
         </Col>
         <Col xs={3} sm={3} md={2} lg={2} />
       </Row>
     </Grid>
         <br/>
-       <table align="center" cellPadding="10" >
-           <thead>
+       <table className="ui compact celled definition table" >
+           <thead className="full-width" >
               <tr>
                 <th>Cuenta</th>
                 <th>Usuario</th>
                 <th>Clave</th>
-                <td><i>Mostrar</i></td>
+                
               </tr>
            </thead>    
            <tbody>
@@ -147,7 +155,7 @@ class App extends Component {
            </tbody>
        </table>
 
-  </container>
+  </div>
   );
 }
 componentDidMount(){
