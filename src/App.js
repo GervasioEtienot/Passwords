@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import Item from './Item';
+import ComponenteCuenta from './ComponenteCuenta'
 import Amplify, { API, graphqlOperation, Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { withAuthenticator } from 'aws-amplify-react';
-//import { async } from 'q';
-//import Form from 'react-bootstrap/Form'
-//import Container from 'react-bootstrap/Container'
-//import Row from 'react-bootstrap/Row'
-//import Col from 'react-bootstrap/Col'
-import { Grid, Row, Col } from 'react-flexbox-grid';
+
+
 import { container } from '@aws-amplify/ui';
 
 Amplify.configure(awsconfig);
@@ -59,31 +56,24 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state={
-      cuenta:"",
-      usuario:"",
-      clave:"",
       lista: [],
       loggedUser: '',
       botonNuevaCuenta: false
     }
-    this.handleChange = this.handleChange.bind(this);
     this.todoMutation = this.todoMutation.bind(this);
   }
-  handleChange(event){
-    this.setState({[event.target.name]: event.target.value});
-  }
-
-  todoMutation = async () => {
+  
+  todoMutation = async (datosCuenta) => {
     const todoDetails = {
-      cuenta: this.state.cuenta,
-      usuario: this.state.usuario,
-      clave: this.state.clave,
+      cuenta: datosCuenta.cuenta,
+      usuario: datosCuenta.usuario,
+      clave: datosCuenta.clave,
       propietario: this.state.loggedUser
     };
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
     alert("La cuenta de " + JSON.stringify(newTodo.data.createTodo.cuenta) + " ha sido registrada.");
     this.listQuery()
-    this.setState({cuenta:"", usuario:"", clave:"", botonNuevaCuenta: false});
+    this.setState({botonNuevaCuenta: false});
   }
 
   getUser = async () => {
@@ -114,49 +104,13 @@ class App extends Component {
   botNewCuetna = () => {
     this.setState({botonNuevaCuenta: true});
   }
-  cancelar = () => {this.setState( {botonNuevaCuenta: true} ); }
+  cancelar = () => {this.setState( {botonNuevaCuenta: false} ); }
   
-  onFormSubmit = (event) => {
-    event.preventDefault();
-    this.todoMutation();
-  }
-  
+    
   render(){
   if(this.state.botonNuevaCuenta){
     return (
-      <div>
-          <Grid>
-            <Row>
-              <Col xs={1} sm={1} md={2} lg={2} />
-              <Col xs={10} sm={10} md={8} lg={8} className="Grid">
-                <div className="ui inverted segment">
-                   <form className="ui inverted form" onSubmit={this.onFormSubmit}>
-                      <div className="field">
-                        <label>Cuenta</label>
-                        <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
-                      </div>
-                      <div className="field">
-                        <label>Usuario</label>
-                        <input type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleChange} />
-                      </div>
-                      <div className="field">
-                        <label>Clave</label>
-                        <input type="password" name="clave" placeholder="Clave" value={this.state.clave} onChange={this.handleChange} />
-                      </div>
-                        <br/>
-                      <div class="ui buttons">
-                        <button className="ui button" onClick={this.cancelar}>Cancelar</button>
-                        
-                        <button className="ui positive button" onClick={this.todoMutation} >Guardar</button>
-                      </div>
-                  </form>
-                </div>
-              </Col>
-              <Col xs={1} sm={1} md={2} lg={2} />
-            </Row>
-          </Grid>
-
-      </div>
+      <ComponenteCuenta traeDatos={this.todoMutation} cancelarRegistro={this.cancelar} />
     );
   }  
   else{
