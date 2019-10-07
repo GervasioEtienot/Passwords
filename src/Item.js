@@ -34,8 +34,8 @@ class Item extends Component{
                <td width="30%" > {this.state.claveVisible ? this.props.datos.clave : '******'} </td>
                <td> 
                   <i className={this.state.icono} onClick={this.mostrar.bind(this)}></i>
-                  <i class="large pencil alternate icon"></i>
-                  <i class="large trash alternate icon" onClick={this.quitarCuenta.bind(this)}></i> 
+                  <i className="large pencil alternate icon"></i>
+                  <i className="large trash alternate icon" onClick={this.quitarCuenta.bind(this)}></i> 
                </td>                              
             </tr>
         )
