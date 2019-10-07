@@ -10,6 +10,7 @@ import { withAuthenticator } from 'aws-amplify-react';
 //import Row from 'react-bootstrap/Row'
 //import Col from 'react-bootstrap/Col'
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { container } from '@aws-amplify/ui';
 
 Amplify.configure(awsconfig);
 
@@ -115,16 +116,21 @@ class App extends Component {
   }
   cancelar = () => {this.setState( {botonNuevaCuenta: true} ); }
   
+  onFormSubmit = (event) => {
+    event.preventDefault();
+    this.todoMutation();
+  }
+  
   render(){
   if(this.state.botonNuevaCuenta){
     return (
-      <div >
+      <div>
           <Grid>
             <Row>
-              <Col xs={3} sm={3} md={2} lg={2} />
-              <Col xs={6} sm={6} md={8} lg={8} className="Grid">
+              <Col xs={1} sm={1} md={2} lg={2} />
+              <Col xs={10} sm={10} md={8} lg={8} className="Grid">
                 <div className="ui inverted segment">
-                   <form className="ui inverted form">
+                   <form className="ui inverted form" onSubmit={this.onFormSubmit}>
                       <div className="field">
                         <label>Cuenta</label>
                         <input type="text" name="cuenta" id="cuenta" placeholder="Cuenta" value={this.state.cuenta} onChange={this.handleChange} />
@@ -140,15 +146,16 @@ class App extends Component {
                         <br/>
                       <div class="ui buttons">
                         <button className="ui button" onClick={this.cancelar}>Cancelar</button>
-                        <div class="o"></div>
+                        
                         <button className="ui positive button" onClick={this.todoMutation} >Guardar</button>
                       </div>
                   </form>
                 </div>
               </Col>
-              <Col xs={3} sm={3} md={2} lg={2} />
+              <Col xs={1} sm={1} md={2} lg={2} />
             </Row>
           </Grid>
+
       </div>
     );
   }  
@@ -157,13 +164,13 @@ class App extends Component {
      <div>
         <button className="ui primary basic button" onClick={this.botNewCuetna}>Nueva Cuenta</button>
         <br/>
-        <table className="ui compact celled definition unstackable table" >
+        <table className="ui compact celled definition table" >
             <thead className="full-width" >
               <tr>
                 <th>Cuenta</th>
                 <th>Usuario</th>
                 <th>Clave</th>
-                
+                <th className="two wide"></th>
               </tr>
             </thead>    
             <tbody>
@@ -172,6 +179,7 @@ class App extends Component {
               )}
             </tbody>
         </table>
+        
      </div>
  );
     
