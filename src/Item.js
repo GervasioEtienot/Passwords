@@ -10,6 +10,12 @@ class Item extends Component{
     }
    }
 
+    actualizar = () => {
+        const claveActualizada = prompt('Ingeresa la clave nueva');
+        const datosActulizados = {id: this.props.datos.id, clave: claveActualizada}
+        this.props.updateCuenta(datosActulizados);
+    }
+
     quitarCuenta(){
         if(this.props.onRemove)
             this.props.onRemove();
@@ -34,7 +40,7 @@ class Item extends Component{
                <td width="30%" > {this.state.claveVisible ? this.props.datos.clave : '******'} </td>
                <td> 
                   <i className={this.state.icono} onClick={this.mostrar.bind(this)}></i>
-                  <i className="large pencil alternate icon"></i>
+                  <i className="large pencil alternate icon" onClick={this.actualizar} ></i>
                   <i className="large trash alternate icon" onClick={this.quitarCuenta.bind(this)}></i> 
                </td>                              
             </tr>

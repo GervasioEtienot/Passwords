@@ -59,7 +59,7 @@ onFormSubmit = (event) => {
                                onChange={this.onFormChange} />
                       </div>
                         <br/>
-                      <div class="ui buttons">
+                      <div className="ui buttons">
                         <button className="ui button" 
                                 onClick={() => {this.props.cancelarRegistro();} }>Cancelar</button>
                         <button className="ui positive button" onClick={this.onFormSubmit} >Guardar</button>

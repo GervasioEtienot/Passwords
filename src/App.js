@@ -39,6 +39,19 @@ const addTodo = `mutation createTodo($cuenta:String! $usuario:String! $clave:Str
   }
 }`
 
+const actualizarTodo = `mutation updateTodo($id:ID! $clave:String! ) {
+  updateTodo(input:{
+    id:$id
+    clave:$clave
+  }){
+    id
+    cuenta
+    usuario
+    clave
+    propietario
+  }
+}`
+
 const eliminarCuenta = `mutation deleteTodo($id:ID!){
   deleteTodo(input:{
     id:$id
@@ -72,6 +85,13 @@ class App extends Component {
     };
     const newTodo = await API.graphql(graphqlOperation(addTodo, todoDetails));
     alert("La cuenta de " + JSON.stringify(newTodo.data.createTodo.cuenta) + " ha sido registrada.");
+    this.listQuery()
+    this.setState({botonNuevaCuenta: false});
+  }
+
+  actualizarCuenta = async (datosActualizados) => {
+    const todoActualizado = await API.graphql(graphqlOperation(actualizarTodo, datosActualizados));
+    alert("La clave de la cuenta ha sido modificada.");
     this.listQuery()
     this.setState({botonNuevaCuenta: false});
   }
@@ -129,7 +149,10 @@ class App extends Component {
             </thead>    
             <tbody>
               {this.state.lista.map((item,index) => 
-                      <Item datos={item} key={index} onRemove={ () => this.quitarCuenta(item.id)} /> 
+                      <Item datos={item} 
+                            key={index} 
+                            onRemove={ () => this.quitarCuenta(item.id)}
+                            updateCuenta={this.actualizarCuenta} /> 
               )}
             </tbody>
         </table>
