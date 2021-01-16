@@ -12,7 +12,7 @@ import { container } from '@aws-amplify/ui';
 Amplify.configure(awsconfig);
 
 const listTodos = `query listTodos {
-  listTodos(filter: {propietario: {eq:"$propietario"} }) {
+  listTodos(limit: 100, filter: {propietario: {eq:"$propietario"} }) {
     items{
       id
       cuenta
@@ -135,7 +135,7 @@ class App extends Component {
   }  
   else{
     return(
-     <div>
+     <div className= "container">
         <button className="ui primary basic button" onClick={this.botNewCuetna}>Nueva Cuenta</button>
         <br/>
         <table className="ui compact celled definition table" >
